@@ -285,6 +285,23 @@ template <typename T> void SX126xInterface<T>::enableInterrupt(void (*callback)(
 #endif
 }
 
+template <typename T> int16_t SX126xInterface<T>::getCurrentRSSI()
+{
+    float rssi = lora.getRSSI(false);
+    return (int16_t)round(rssi);
+}
+
+template <typename T> void SX126xInterface<T>::enableInterrupt(void (*callback)())
+{
+#ifdef LORA_DIO1_SOFTWARE_POLL
+    irqPollingActive = true;
+    pollTxMode = isIsrTxCallback(callback);
+    scheduleIrqPollTick();
+#else
+    lora.setDio1Action(callback);
+#endif
+}
+
 template <typename T> void SX126xInterface<T>::disableInterrupt()
 {
 #ifdef LORA_DIO1_SOFTWARE_POLL
