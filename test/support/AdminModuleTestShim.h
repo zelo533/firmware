@@ -11,6 +11,7 @@ class AdminModuleTestShim : public AdminModule
     using AdminModule::handleReceivedProtobuf;
     using AdminModule::handleSetConfig;
     using AdminModule::handleSetModuleConfig;
+    using AdminModule::responseIsSolicited; // request/response pairing gate
     using AdminModule::setPassKey;
 
     // With an "open edit transaction" saveChanges() is a pure no-op: no reloadConfig/saveToDisk/reboot.
