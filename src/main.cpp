@@ -428,10 +428,14 @@ void setup()
 #if ARCH_PORTDUINO
     RTCQuality ourQuality = RTCQualityDevice;
 
+#ifndef _WIN32
+    // timedatectl is systemd-only. Windows stays at RTCQualityDevice rather than
+    // claim unverified NTP quality; a w32tm equivalent would parse localized output.
     std::string timeCommandResult = exec("timedatectl status | grep synchronized | grep yes -c");
     if (timeCommandResult[0] == '1') {
         ourQuality = RTCQualityNTP;
     }
+#endif
 
     struct timeval tv;
     tv.tv_sec = time(NULL);
